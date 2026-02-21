@@ -1,0 +1,38 @@
+# Terraform local working dir
+.terraform/
+
+# Terraform state files (never commit)
+*.tfstate
+*.tfstate.*
+terraform.tfstate
+terraform.tfstate.backup
+
+# Terraform plan output
+*.tfplan
+tfplan
+
+# Variable files with secrets / personal data
+terraform.tfvars
+*.auto.tfvars
+*.auto.tfvars.json
+
+# Crash / debug
+crash.log
+crash.*.log
+
+# Override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# CLI config / local overrides
+.terraformrc
+terraform.rc
+
+# Generated Lambda package (built artifact)
+lambda/*.zip
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
