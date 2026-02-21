@@ -1,11 +1,11 @@
-# Cloud Auto Scaling Monitoring (Terraform + ALB + ASG + CloudWatch)
+# ⚡ Cloud Auto Scaling Monitoring (Terraform + ALB + ASG + CloudWatch)
 
 This project demonstrates **CPU-based Auto Scaling** on AWS using **Terraform**, with an **Application Load Balancer (ALB)**, **Auto Scaling Group (ASG)**, **CloudWatch alarms/dashboard**, and a custom `/burn` endpoint for repeatable load generation.  
 It also includes a **monitoring/event-logging pipeline** (Lambda + DynamoDB + email notifications) to improve visibility into scaling-related events and alarm activity.
 
 ---
 
-## What’s included
+## 📝 What’s included
 
 - **Networking**: VPC, public + private subnets (2 AZ design), routing (private instances can install packages)
 - **Compute**: ALB + Target Group + Listener, Launch Template, Auto Scaling Group
@@ -16,7 +16,7 @@ It also includes a **monitoring/event-logging pipeline** (Lambda + DynamoDB + em
 
 ---
 
-## High-level architecture
+## 🏆 High-level architecture
 
 Internet → **ALB (HTTP :80)** → **EC2 instances (ASG, private subnets)**  
 On each instance:
@@ -31,7 +31,7 @@ Monitoring / event flow:
 
 ---
 
-## Auto Scaling logic
+## 💡 Auto Scaling logic
 
 - **Scale out**: CPUUtilization > **50%** for **2 datapoints** (period 60s)
 - **Scale in**: CPUUtilization < **15%** for **5 datapoints** (period 60s)
@@ -39,7 +39,7 @@ Monitoring / event flow:
 
 ---
 
-## Monitoring & event logging
+## 📈 Monitoring & event logging
 
 In addition to scaling, the project includes monitoring-oriented components for visibility and notifications:
 
@@ -55,10 +55,7 @@ In addition to scaling, the project includes monitoring-oriented components for 
 
 ---
 
-## Repository structure
-
-```text
-## Repository structure
+## 👷 Repository structure
 
 ```text
 cloud-autoscaling-monitoring/
@@ -105,16 +102,18 @@ cloud-autoscaling-monitoring/
 
 ---
 
-## Prerequisites
+## ☑️ Prerequisites
 
 ### Tools
 - AWS account + credentials configured locally (AWS CLI / env vars)
 - Terraform installed
 
-### 1) Create `terraform.tfvars` (required)
+---
+### Create `terraform.tfvars` (required)
 
-Create a file named **`terraform.tfvars`** in the project root:
+- Create a file named **`terraform.tfvars`** in the project root:
 
+---
 ```hcl
 aws_region = "eu-north-1" 
 
@@ -150,7 +149,7 @@ instance_type = "t3.micro"
 - After deployment, AWS sends a **subscription confirmation email**.
 - You must **confirm the subscription**; otherwise email alerts will not be delivered.
 
-## Deploy
+## 🚀 Deploy
 
 ### Option A (recommended): One-click deploy on Windows
 Run:
@@ -195,7 +194,7 @@ terraform apply
 ```
 After apply, open the ALB DNS output in the browser.
 
-## Test endpoints
+## 👍 Test endpoints
 
 - Homepage
 http://"insert alb-dns from outputs from the end of deploy"/
@@ -206,7 +205,7 @@ http://"insert alb-dns from outputs from the end of deploy"/burn
 - Expected response:
 Burn started
 
-## Load testing (memory-friendly PowerShell)
+## 💪 Load testing (memory-friendly PowerShell)
 
 This avoids spawning thousands of jobs.
 It creates a fixed number of workers that keep calling /burn for ~8 minutes.
@@ -244,41 +243,69 @@ $jobs | Remove-Job
 Write-Host "DONE"
 ```
 
-## Evidence (screenshots)
+## 📜 Evidence (screenshots)
 
 > Screenshots in this README focus on the Auto Scaling test flow (ALB, ASG, CloudWatch dashboard, alarms, activity history, and load generation).  
+
 > The project also includes event logging/notification components (Lambda + DynamoDB + email), but those artifacts are not shown here because the environment was destroyed after validation.
 
-Terraform applied successfully
+### Terraform applied successfully
+
 ![Terraform](screenshots/terraform.PNG)
-ALB serves the homepage
+
+---
+### ALB serves the homepage
+
 ![Alb](screenshots/alb.PNG)
-/burn endpoint works in browser
+
+---
+### /burn endpoint works in browser
+
 ![Burn_browser](screenshots/burn_browser.PNG)
-Dashboard: CPU spike + instance count changes
+
+---
+### Dashboard: CPU spike + instance count changes
+
 ![Dashboard](screenshots/dashboard.PNG)
-Auto Scaling activity history (scale out / scale in)
+
+---
+### Auto Scaling activity history (scale out / scale in)
+
 ![Asg_activity](screenshots/asg_activity.PNG)
-CloudWatch alarms overview + history
+
+---
+### CloudWatch alarms overview + history
+
 ![Alarms](screenshots/alarms.PNG)
 ![Cpu_high](screenshots/cpu_high_alarm.PNG)
 ![Cpu_low](screenshots/cpu_low_alarm.PNG)
-Load generator running / finished
+
+---
+### Load generator running / finished
+
 ![Burn_running](screenshots/burn_running.PNG)
 ![Burn_done](screenshots/burn_done.PNG)
-ALB / Target Group monitoring
+
+---
+### ALB / Target Group monitoring
+
 ![Load_balancer](screenshots/load_balancer.PNG)
 ![Target_group](screenshots/load_balancer_target_group.PNG)
-Example email notification received from the monitoring pipeline
+
+---
+### Example email notification received from the monitoring pipeline
+
 ![Email](screenshots/email.PNG)
 
-## Optional evidence (monitoring notifications)
+---
+
+### Optional evidence (monitoring notifications)
 
 If you want to extend the README later, useful additional evidence includes:
 - DynamoDB table screenshot showing logged events (timestamps, alarm names, actions)
 - CloudWatch Logs screenshot for the Lambda function execution
 
-## Cost warning (important)
+## 💸 Cost warning (important)
 
 This project uses AWS resources that can generate non-trivial costs if left running:
 - NAT Gateway (hourly + data processing)
@@ -289,7 +316,7 @@ This project uses AWS resources that can generate non-trivial costs if left runn
 
 Recommendation for test pourpouses: deploy, run the test (takes ~20 minutes to scale up, then back down. drink a coffee), make observations, then destroy immediately.
 
-## Estimated cost (rough order-of-magnitude)
+## 👛 Estimated cost (rough order-of-magnitude)
 
 Exact pricing depends on region and usage. The biggest cost drivers are NAT Gateway and ALB.
 
@@ -303,7 +330,7 @@ Lambda, SNS, and DynamoDB are typically low-cost for this type of short demo wor
 
 If you run it only for a short lab session (e.g., 1–2 hours), cost is typically very low, but NAT/ALB still bill hourly.
 
-## Cleanup (avoid costs)
+## 🧹 Cleanup (avoid costs)
 
 ### Option A (recommended): One-click destroy on Windows
 
@@ -326,7 +353,7 @@ pause
 ```powershell
 terraform destroy
 ```
-## Notes / troubleshooting
+## 🎯 Notes / troubleshooting
 
 - Scale-out might not trigger if CPU spikes are too short. The alarm requires sustained threshold breaches.
 - Scale-in typically takes longer due to evaluation windows and cooldown.
